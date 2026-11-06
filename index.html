@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c32">
+  <meta name="description" content="An illustrated explanation of eigenvector-based word embeddings, with beautifully rendered LaTeX.">
+  <title>Eigenvector Word Embeddings — Math Notes</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17243a;
+      --muted: #52647a;
+      --line: #dde5f0;
+      --blue: #315be4;
+      --blue-soft: #eef2ff;
+      --paper: #f7f9fd;
+      --shadow: 0 22px 70px rgba(15, 38, 74, .10);
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.7;
+    }
+    a { color: var(--blue); }
+    a:hover { text-decoration-thickness: 2px; }
+    .topbar {
+      background: #101c32;
+      color: #e9efff;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .topbar-inner {
+      max-width: 1080px;
+      margin: auto;
+      min-height: 65px;
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+    .brand { font-size: .94rem; font-weight: 760; letter-spacing: .015em; }
+    .topbar a { color: #e9efff; font-size: .87rem; text-decoration: none; }
+    .topbar a:hover { text-decoration: underline; }
+    .hero {
+      background: radial-gradient(circle at 88% 16%, rgba(107,145,255,.28), transparent 33%),
+                  linear-gradient(135deg, #101c32, #19335c);
+      color: white;
+      padding: 76px 28px 110px;
+    }
+    .hero-inner { max-width: 1024px; margin: auto; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: #a9c0ff;
+      font-size: .74rem;
+      font-weight: 800;
+      margin: 0 0 16px;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 5.7vw, 4.4rem);
+      line-height: 1.11;
+      letter-spacing: -.05em;
+      margin: 0 0 20px;
+      max-width: 800px;
+    }
+    .hero p:last-child { max-width: 650px; color: #d5e0f8; font-size: 1.12rem; margin: 0; }
+    main {
+      max-width: 1024px;
+      padding: 0 28px 72px;
+      margin: -68px auto 0;
+      position: relative;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: clamp(24px, 5vw, 44px);
+      margin-bottom: 22px;
+      box-shadow: 0 6px 22px rgba(15,38,74,.035);
+    }
+    .answer-card { box-shadow: var(--shadow); }
+    .kicker {
+      font-size: .76rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 800;
+      color: var(--blue);
+      margin: 0 0 10px;
+    }
+    h2 { letter-spacing: -.035em; line-height: 1.2; font-size: clamp(1.5rem,3vw,2rem); margin: 0 0 15px; }
+    h3 { letter-spacing: -.02em; line-height: 1.25; margin: 0 0 8px; font-size: 1.08rem; }
+    p { margin: 0 0 16px; }
+    p:last-child { margin-bottom: 0; }
+    .muted { color: var(--muted); }
+    .question {
+      padding: 19px 22px;
+      background: #f5f7fc;
+      border-left: 4px solid var(--blue);
+      border-radius: 0 12px 12px 0;
+      color: #32435c;
+      margin: 18px 0 26px;
+    }
+    .formula {
+      background: var(--blue-soft);
+      border: 1px solid #d8e1ff;
+      border-radius: 17px;
+      padding: 22px 16px;
+      margin: 20px 0;
+      text-align: center;
+      overflow-x: auto;
+      overflow-y: hidden;
+      font-size: clamp(.86rem, 2vw, 1.08rem);
+    }
+    .small-formula { background: #f7f9fd; border-color: #e3e9f2; }
+    .answer-sentence { font-weight: 750; font-size: 1.11rem; }
+    .callout {
+      margin: 22px 0 0;
+      padding: 16px 19px;
+      border-radius: 12px;
+      background: #effaf5;
+      border: 1px solid #c6ebda;
+      color: #16553c;
+    }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 24px; }
+    .step { border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 16px; }
+    .step-num { display: inline-flex; align-items: center; justify-content: center; width: 31px; height: 31px; border-radius: 9px; background: #e9efff; color: #244bc5; font-weight: 800; font-size: .88rem; margin-bottom: 12px; }
+    .step p { color: var(--muted); font-size: .92rem; line-height: 1.58; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .mini {
+      background: #f8faff;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      padding: 20px;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .mini p { text-align: left; color: var(--muted); font-size: .91rem; }
+    footer { max-width: 1024px; margin: 0 auto; padding: 0 28px 40px; color: var(--muted); font-size: .84rem; }
+    footer a { color: inherit; }
+    mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 3px 0; }
+    @media (max-width: 720px) {
+      .hero { padding-top: 54px; padding-bottom: 97px; }
+      .steps, .two-col { grid-template-columns: 1fr; }
+      .topbar-inner { padding: 12px 18px; }
+      .card { border-radius: 17px; }
+      main { padding-left: 16px; padding-right: 16px; }
+      .formula { padding: 18px 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      chtml: { scale: 1.0 },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <span class="brand">∑ &nbsp;Math Notes</span>
+      <a href="https://github.com/prototyp037/24IsTheAnswerToLife" target="_blank" rel="noopener noreferrer">View source on GitHub ↗</a>
+    </div>
+  </header>
+
+  <section class="hero" aria-labelledby="page-title">
+    <div class="hero-inner">
+      <p class="eyebrow">Artificial Intelligence · Linear Algebra</p>
+      <h1 id="page-title">Eigenvector Word Embeddings</h1>
+      <p>How a word's position in an eigenvector matrix becomes its vector representation.</p>
+    </div>
+  </section>
+
+  <main>
+    <article class="card answer-card" aria-labelledby="answer-title">
+      <p class="kicker">The question</p>
+      <h2 id="answer-title">Which vector represents word \(e_i\)?</h2>
+      <div class="question">
+        If \(V=[v_1,v_2,\ldots,v_c]\) is the eigenvector matrix of a co-occurrence matrix \(C\),
+        what is the eigenvector embedding of word \(e_i\)?
+      </div>
+      <p class="kicker">The answer</p>
+      <p class="answer-sentence">Take row \(i\) of \(V\).</p>
+      <p class="muted">In row-vector form, the embedding is:</p>
+      <div class="formula">
+        \[
+          \boxed{\operatorname{embedding}(e_i)
+          =e_i^\top V
+          =\begin{bmatrix}(v_1)_i & (v_2)_i & \cdots & (v_c)_i\end{bmatrix}}
+        \]
+      </div>
+      <p class="muted">If you prefer a column-vector embedding, transpose the row:</p>
+      <div class="formula small-formula">
+        \[
+          \boxed{V^\top e_i
+          =\begin{bmatrix}(v_1)_i\\(v_2)_i\\\vdots\\(v_c)_i\end{bmatrix}}
+        \]
+      </div>
+      <div class="callout">
+        <strong>Remember:</strong> The <em>columns</em> of \(V\) are eigenvectors; the <em>rows</em> of \(V\) give word embeddings.
+      </div>
+    </article>
+
+    <section class="card" aria-labelledby="why-title">
+      <p class="kicker">The intuition</p>
+      <h2 id="why-title">Why does this work?</h2>
+      <p>Each eigenvector defines a direction in the co-occurrence space. Word \(i\) has one coordinate along each direction, and those coordinates form its embedding.</p>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <h3>Construct \(V\)</h3>
+          <p>Place the chosen eigenvectors \(v_1,\ldots,v_c\) in the columns of \(V\).</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <h3>Select word \(i\)</h3>
+          <p>Use the one-hot basis vector \(e_i\), whose only nonzero entry is at index \(i\).</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <h3>Read its coordinates</h3>
+          <p>Multiply \(e_i^\top V\) to extract exactly the \(i\)-th row.</p>
+        </div>
+      </div>
+      <div class="formula small-formula">
+        \[
+          (e_i^\top V)_j=e_i^\top v_j=(v_j)_i
+        \]
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="example-title">
+      <p class="kicker">Worked example</p>
+      <h2 id="example-title">A two-word vocabulary</h2>
+      <p>Consider the symmetric co-occurrence matrix \(C\) and an orthonormal eigenvector matrix \(V\):</p>
+      <div class="formula small-formula">
+        \[
+          C=\begin{bmatrix}2&1\\1&2\end{bmatrix},
+          \qquad
+          V=\frac{1}{\sqrt{2}}
+          \begin{bmatrix}1&1\\1&-1\end{bmatrix}
+        \]
+      </div>
+      <div class="two-col">
+        <div class="mini">
+          <h3>Word \(e_1\)</h3>
+          <p>Take the first row:</p>
+          \[
+            e_1^\top V=\frac{1}{\sqrt{2}}\begin{bmatrix}1&1\end{bmatrix}
+          \]
+        </div>
+        <div class="mini">
+          <h3>Word \(e_2\)</h3>
+          <p>Take the second row:</p>
+          \[
+            e_2^\top V=\frac{1}{\sqrt{2}}\begin{bmatrix}1&-1\end{bmatrix}
+          \]
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="details-title">
+      <p class="kicker">A useful detail</p>
+      <h2 id="details-title">What if we keep only \(k\) eigenvectors?</h2>
+      <p>For a vocabulary of \(n\) words, let \(V_k\in\mathbb{R}^{n\times k}\) contain \(k\) selected eigenvectors. Then each word receives a \(k\)-dimensional embedding:</p>
+      <div class="formula small-formula">
+        \[
+          \operatorname{embedding}_k(e_i)=e_i^\top V_k\in\mathbb{R}^{1\times k}
+        \]
+      </div>
+      <p class="muted">This is specifically the <strong>eigenvector-only</strong> embedding. Some spectral embedding methods also weight coordinates by eigenvalues; that is a different convention.</p>
+    </section>
+  </main>
+  <footer>
+    <p>Built as a static GitHub Pages site. Equations are rendered with <a href="https://www.mathjax.org/">MathJax</a>. <a href="https://github.com/prototyp037/24IsTheAnswerToLife">Repository</a>.</p>
+  </footer>
+</body>
+</html>
