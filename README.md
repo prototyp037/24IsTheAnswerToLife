@@ -1,36 +1,35 @@
-# Eigenvector Word Embeddings
+# Math Quick Notes
 
-A small, responsive website explaining eigenvector-based word embeddings with rendered LaTeX, a derivation, and a worked example.
+A compact, mobile-first **GitHub Pages** website for short mathematical explanations with rendered LaTeX. Designed for narrow rectangular screens, including small phones and landscape orientation.
 
-**Website (GitHub Pages):** https://prototyp037.github.io/24IsTheAnswerToLife/
+**Website:** https://prototyp037.github.io/24IsTheAnswerToLife/
 
-> The website address becomes active after GitHub Pages is enabled in the repository settings.
+## Questions
 
-## Answer
+The website has four selectable tabs:
 
-If \(V=[v_1,v_2,\ldots,v_c]\) contains the chosen eigenvectors of a co-occurrence matrix as its **columns**, then the embedding for word \(e_i\) is the **\(i\)-th row** of \(V\):
+1. **Q1 — Hessian test:** The minimum **could** occur at \(b\), since its Hessian \(2I\) is positive definite; \(a\) and \(c\) are saddle points.
+2. **Q2 — Changing integration order:** \(\displaystyle \int_0^1\int_{x^2}^1\frac{\sqrt y}{1+y^2}\,dy\,dx=\frac{\ln 2}{2}\).
+3. **Q3 — Closest point on a surface:** \(\displaystyle \left(\pm\frac{\sqrt{26}}6,0,\frac13\right)\), each at distance \(\sqrt{5/6}\) from the origin.
+4. **Eigenvectors (previous question):** \(\operatorname{embed}(e_i)=e_i^\top V\), the \(i\)-th row of \(V\).
 
-$$
-\operatorname{embedding}(e_i)
-=e_i^\top V
-=\begin{bmatrix}(v_1)_i & (v_2)_i & \cdots & (v_c)_i\end{bmatrix}.
-$$
+The website includes worked solutions and mathematical reasoning. Names and student IDs from the source photo are intentionally excluded.
 
-If word embeddings are represented as column vectors, this is equivalently \(V^\top e_i\).
+## Design
 
-## Publish the website
+- Responsive CSS for narrow phones and short landscape displays
+- One question visible at a time; tappable, keyboard-accessible tabs
+- Horizontally scrollable equations (no whole-page horizontal overflow)
+- MathJax 3 for browser-rendered LaTeX, loaded from jsDelivr
+- Plain HTML, CSS, and JavaScript — no build tools needed
 
-This is a no-build static site. To enable HTTPS hosting:
+## Publish with HTTPS
+
+If GitHub Pages is not already active:
 
 1. Open [Settings → Pages](https://github.com/prototyp037/24IsTheAnswerToLife/settings/pages).
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Select **main**, choose **/(root)**, and click **Save**.
-4. Open the [live website](https://prototyp037.github.io/24IsTheAnswerToLife/) after GitHub deploys it.
+2. Under **Build and deployment**, select **Deploy from a branch**.
+3. Set branch to **main** and folder to **/(root)**.
+4. Save. GitHub provides HTTPS hosting at the website URL above.
 
-The site uses [MathJax](https://www.mathjax.org/) from a CDN to render LaTeX in the browser. Edit [index.html](index.html) to change website content. No npm dependencies or local build commands are needed.
-
-## Files
-
-- [index.html](index.html) — complete responsive website and math content
-- [.nojekyll](.nojekyll) — instructs GitHub Pages to serve the site without Jekyll processing
-- [README.md](README.md) — overview and hosting instructions
+Edit [index.html](index.html) to change questions and layout. The [.nojekyll](.nojekyll) file disables Jekyll processing.
