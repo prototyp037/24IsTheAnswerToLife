@@ -1,39 +1,36 @@
-# 24IsTheAnswerToLife
+# Eigenvector Word Embeddings
 
-## Eigenvector embedding of a word
+A small, responsive website explaining eigenvector-based word embeddings with rendered LaTeX, a derivation, and a worked example.
 
-### Question
+**Website (GitHub Pages):** https://prototyp037.github.io/24IsTheAnswerToLife/
 
-If $V = [v_1, v_2, \ldots, v_c]$ is the eigenvector matrix of the word co-occurrence matrix $C$, what is the eigenvector embedding of word $e_i$?
+> The website address becomes active after GitHub Pages is enabled in the repository settings.
 
-### Answer
+## Answer
 
-**Take the $i$-th row of $V$.** Equivalently, when the embedding is written as a column vector,
-
-$$
-\boxed{\operatorname{embed}(e_i) = V^\top e_i =
-\begin{bmatrix}
-(v_1)_i \\
-(v_2)_i \\
-\vdots \\
-(v_c)_i
-\end{bmatrix}}
-$$
-
-Here:
-
-- $v_1,\ldots,v_c$ are the **columns** of $V$ (the eigenvectors of $C$).
-- $e_i$ denotes the **one-hot vector** for word $i$.
-- $(v_j)_i$ is the $i$-th entry of eigenvector $v_j$.
-
-### Why?
-
-The eigenvectors form an orthonormal basis for a real symmetric co-occurrence matrix. The embedding records the coordinates of word $i$ along each eigenvector: its entries across the $i$-th row of $V$.
-
-If only $k$ eigenvectors are retained for a $k$-dimensional embedding, use $V_k = [v_1,\ldots,v_k]$:
+If \(V=[v_1,v_2,\ldots,v_c]\) contains the chosen eigenvectors of a co-occurrence matrix as its **columns**, then the embedding for word \(e_i\) is the **\(i\)-th row** of \(V\):
 
 $$
-\operatorname{embed}_k(e_i) = V_k^\top e_i \in \mathbb{R}^k.
+\operatorname{embedding}(e_i)
+=e_i^\top V
+=\begin{bmatrix}(v_1)_i & (v_2)_i & \cdots & (v_c)_i\end{bmatrix}.
 $$
 
-**Takeaway:** Columns of $V$ are eigenvectors; **rows of $V$ are word embeddings**. This question asks for the eigenvector-only embedding, without additional eigenvalue weighting.
+If word embeddings are represented as column vectors, this is equivalently \(V^\top e_i\).
+
+## Publish the website
+
+This is a no-build static site. To enable HTTPS hosting:
+
+1. Open [Settings → Pages](https://github.com/prototyp037/24IsTheAnswerToLife/settings/pages).
+2. Under **Build and deployment**, choose **Deploy from a branch**.
+3. Select **main**, choose **/(root)**, and click **Save**.
+4. Open the [live website](https://prototyp037.github.io/24IsTheAnswerToLife/) after GitHub deploys it.
+
+The site uses [MathJax](https://www.mathjax.org/) from a CDN to render LaTeX in the browser. Edit [index.html](index.html) to change website content. No npm dependencies or local build commands are needed.
+
+## Files
+
+- [index.html](index.html) — complete responsive website and math content
+- [.nojekyll](.nojekyll) — instructs GitHub Pages to serve the site without Jekyll processing
+- [README.md](README.md) — overview and hosting instructions
