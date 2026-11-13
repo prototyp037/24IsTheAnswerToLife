@@ -49,7 +49,7 @@
     .muted { color: var(--sub); }
     .prompt { background: #f8faff; border: 1px solid #e4eafa; padding: 13px 15px; border-radius: 12px; margin: 15px 0; }
     .prompt p:last-child { margin-bottom: 0; }
-    .verdict { margin: 16px 0; background: var(--good-bg); border: 1px solid #bcead5; border-radius: 13px; padding: 15px; }
+    .verdict { margin: 16px 0; background: var(--good-bg); border: 1px solid #bcead5; border-radius: 13px; padding: 15px; overflow-x: auto; scrollbar-width: thin; }
     .verdict .label { color: var(--good); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 800; margin: 0 0 4px; }
     .verdict strong { font-size: 1.06rem; }
     .mathbox { overflow-x: auto; overflow-y: hidden; max-width: 100%; background: var(--soft); border: 1px solid #d9e3fc; border-radius: 13px; padding: 12px 12px; margin: 12px 0; text-align: center; scrollbar-width: thin; }
@@ -67,7 +67,7 @@
     .field-figure svg { display: block; width: 100%; height: auto; }
     .field-caption { text-align: center; color: var(--sub); font-size: .78rem; margin: 0 0 11px; }
     .answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 14px 0; }
-    .answer-chip { border: 1px solid #bcead5; background: var(--good-bg); border-radius: 12px; padding: 11px 12px; }
+    .answer-chip { min-width: 0; overflow-x: auto; border: 1px solid #bcead5; background: var(--good-bg); border-radius: 12px; padding: 11px 12px; }
     .answer-chip .key { color: var(--good); text-transform: uppercase; letter-spacing: .07em; font-size: .69rem; font-weight: 790; }
     .answer-chip strong { display: block; font-size: 1.16rem; }
     @media (max-width: 330px) { .answer-grid { gap: 5px; } .answer-chip { padding: 9px 7px; } }
