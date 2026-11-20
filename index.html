@@ -3,421 +3,132 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#101c32">
-  <meta name="description" content="Compact, mobile-friendly math solutions with rendered LaTeX.">
-  <title>Math Quick Notes — Multivariable Calculus &amp; AI</title>
+  <meta name="theme-color" content="#090d17">
+  <meta name="description" content="A single dark-themed math worksheet viewer. The latest sheet replaces the previous one.">
+  <title>Math Notes — Next Worksheet</title>
   <style>
     :root {
-      color-scheme: light;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --ink: #16243b;
-      --sub: #4b5f79;
-      --edge: #dbe3ed;
-      --bg: #f4f7fb;
-      --navy: #101c32;
-      --accent: #305ad8;
-      --soft: #edf2ff;
-      --good: #0e694d;
-      --good-bg: #eaf8f1;
-      font-synthesis: none;
+      color-scheme: dark;
+      --bg: #090d17;
+      --surface: #111828;
+      --surface-2: #182137;
+      --line: #293349;
+      --fg: #f0f4fc;
+      --muted: #a3b2c9;
+      --accent: #a5b9ff;
+      --accent-soft: #1b2a4b;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body { margin: 0; color: var(--ink); background: var(--bg); line-height: 1.55; }
-    a { color: var(--accent); }
-    .masthead { background: var(--navy); color: #fff; }
-    .masthead-inner { max-width: 880px; margin: auto; padding: 15px 20px 19px; }
-    .strap { margin: 0 0 4px; font-size: .72rem; font-weight: 760; letter-spacing: .11em; text-transform: uppercase; color: #b8ccfd; }
-    h1 { font-size: clamp(1.25rem, 4.8vw, 1.85rem); margin: 0; line-height: 1.2; letter-spacing: -.035em; }
-    .intro { font-size: .88rem; color: #d7e4ff; margin: 6px 0 0; }
-    .shell { max-width: 880px; padding: 14px 20px 38px; margin: auto; }
-    .tabs { display: flex; gap: 7px; margin-bottom: 13px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x proximity; padding-bottom: 4px; scrollbar-width: thin; }
-    .tab {
-      font: inherit; min-height: 47px; min-width: 116px; flex: 0 0 auto; scroll-snap-align: start; border-radius: 12px; cursor: pointer;
-      background: #fff; color: #40516b; font-weight: 720; font-size: .83rem;
-      border: 1px solid var(--edge); padding: 9px 5px; text-align: center;
-      -webkit-tap-highlight-color: transparent;
+    *,*::before,*::after { box-sizing: border-box; }
+    html { width:100%; min-width:0; -webkit-text-size-adjust:100%; overflow-x:clip; }
+    body {
+      width:100%; min-width:0; margin:0; overflow-x:clip;
+      background:var(--bg); color:var(--fg);
+      font: 400 16px/1.68 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     }
-    .tab[aria-selected="true"] { background: #2449bf; color: #fff; border-color: #2449bf; box-shadow: 0 3px 9px rgba(35,66,150,.18); }
-    .tab:focus-visible { outline: 3px solid #7aa5fa; outline-offset: 2px; }
-    [hidden] { display: none !important; }
-    .sheet { border: 1px solid var(--edge); border-radius: 18px; padding: 23px; background: #fff; box-shadow: 0 9px 25px rgba(24,47,82,.045); }
-    .eyebrow { font-size: .71rem; font-weight: 810; text-transform: uppercase; letter-spacing: .09em; color: var(--accent); margin: 0 0 4px; }
-    h2 { margin: 0 0 7px; font-size: clamp(1.2rem, 3.6vw, 1.55rem); letter-spacing: -.025em; line-height: 1.22; }
-    h3 { font-size: 1rem; margin: 23px 0 7px; line-height: 1.3; }
-    p { margin: 0 0 11px; }
-    .muted { color: var(--sub); }
-    .prompt { background: #f8faff; border: 1px solid #e4eafa; padding: 13px 15px; border-radius: 12px; margin: 15px 0; }
-    .prompt p:last-child { margin-bottom: 0; }
-    .verdict { margin: 16px 0; background: var(--good-bg); border: 1px solid #bcead5; border-radius: 13px; padding: 15px; overflow-x: auto; scrollbar-width: thin; }
-    .verdict .label { color: var(--good); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 800; margin: 0 0 4px; }
-    .verdict strong { font-size: 1.06rem; }
-    .mathbox { overflow-x: auto; overflow-y: hidden; max-width: 100%; background: var(--soft); border: 1px solid #d9e3fc; border-radius: 13px; padding: 12px 12px; margin: 12px 0; text-align: center; scrollbar-width: thin; }
-    .mathbox.mutedbox { background: #f8faff; border-color: #e6ebf3; }
-    .mathbox mjx-container { min-width: max-content; }
-    .mathbox .MathJax { max-width: none; }
-    .steps { padding-left: 20px; margin: 10px 0; }
-    .steps li { padding-left: 3px; margin-bottom: 9px; }
-    .choice-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 6px; font-size: .88rem; }
-    .choice-list li { border: 1px solid #e6eaf0; background: #fff; border-radius: 9px; padding: 8px 10px; }
-    .choice-list li.correct { border-color: #8bd9b3; background: var(--good-bg); font-weight: 700; }
-    .fineprint { font-size: .85rem; color: var(--sub); }
-    .result { font-weight: 720; }
-    .field-figure { border: 1px solid var(--edge); border-radius: 13px; overflow: hidden; background: #f9fbfe; margin: 14px auto; max-width: 370px; }
-    .field-figure svg { display: block; width: 100%; height: auto; }
-    .field-caption { text-align: center; color: var(--sub); font-size: .78rem; margin: 0 0 11px; }
-    .answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 14px 0; }
-    .answer-chip { min-width: 0; overflow-x: auto; border: 1px solid #bcead5; background: var(--good-bg); border-radius: 12px; padding: 11px 12px; }
-    .answer-chip .key { color: var(--good); text-transform: uppercase; letter-spacing: .07em; font-size: .69rem; font-weight: 790; }
-    .answer-chip strong { display: block; font-size: 1.16rem; }
-    @media (max-width: 330px) { .answer-grid { gap: 5px; } .answer-chip { padding: 9px 7px; } }
-    .footer { max-width: 880px; margin: auto; padding: 0 20px 24px; font-size: .79rem; color: var(--sub); }
-    .footer a { color: inherit; }
-    mjx-container[display="true"] { margin: .45em 0 !important; }
-    @media (max-width: 430px) {
-      .masthead-inner { padding: 12px 13px 14px; }
-      .intro { font-size: .8rem; }
-      .shell { padding: 10px 9px 25px; }
-      .tabs { gap: 4px; margin-bottom: 9px; }
-      .tab { min-height: 44px; min-width: 104px; font-size: .76rem; border-radius: 9px; padding: 7px 3px; }
-      .sheet { border-radius: 13px; padding: 17px 13px; }
-      .mathbox { padding: 8px 7px; }
-      .verdict { padding: 11px 12px; }
-      .footer { padding: 0 12px 20px; }
+    a { color:var(--accent); }
+    .page { width:min(100%,760px); min-width:0; margin:0 auto; padding:32px clamp(15px,4vw,32px) 45px; }
+    .eyebrow {
+      margin:0 0 8px; color:var(--accent); font-size:.72rem;
+      font-weight:760; letter-spacing:.16em; text-transform:uppercase;
     }
-    @media (max-width: 330px) {
-      .tab { min-width: 97px; font-size: .69rem; letter-spacing: -.02em; }
-      h1 { font-size: 1.13rem; }
-      .sheet { padding: 14px 10px; }
-      .mathbox { font-size: .9rem; }
+    h1 { font-size:clamp(1.85rem,6.4vw,2.7rem); letter-spacing:-.04em; line-height:1.15; margin:0 0 9px; }
+    .subtitle { color:var(--muted); margin:0 0 24px; font-size:.96rem; }
+    .worksheet { display:flex; flex-direction:column; gap:18px; min-width:0; }
+    /* New worksheet: one .question element per problem, stacked in document order. */
+    .question {
+      min-width:0; width:100%; background:var(--surface);
+      border:1px solid var(--line); border-radius:18px;
+      padding:clamp(16px,4vw,26px);
+      overflow-wrap:anywhere;
     }
-    @media (orientation: landscape) and (max-height: 470px) {
-      .masthead-inner { padding-top: 8px; padding-bottom: 8px; }
-      .intro { display: none; }
-      .shell { padding-top: 8px; }
-      .tab { min-height: 37px; }
-      .sheet { padding-top: 13px; }
+    .question h2 { margin:0 0 10px; font-size:clamp(1.17rem,3.6vw,1.4rem); line-height:1.35; }
+    .question h3 { margin:19px 0 8px; font-size:1rem; line-height:1.4; }
+    p,li { overflow-wrap:anywhere; }
+    p { margin:0 0 14px; } p:last-child { margin:0; }
+    ol,ul { padding-left:1.3em; margin:10px 0; }
+    li { padding-left:.25em; margin:0 0 8px; }
+    .math {
+      min-width:0; max-width:100%;
+      margin:16px 0; padding:14px 12px;
+      border:1px solid var(--line); border-radius:12px; background:var(--surface-2);
+      overflow-wrap:anywhere;
     }
-    @media (prefers-reduced-motion: no-preference) { .tab { transition: background-color .16s, border-color .16s; } }
+    /* MathJax v4 automatically breaks display and inline equations at mathematical breakpoints.
+       Split wide matrices/long aligned calculations into smaller steps when writing future sheets. */
+    mjx-container { max-width:100%; }
+    mjx-container[display="true"] { width:100%; margin:.4em auto !important; }
+    .answer {
+      padding:12px 14px; margin:12px 0; border-left:3px solid var(--accent);
+      border-radius:8px; background:var(--accent-soft); font-weight:700;
+    }
+    .placeholder {
+      min-height:245px; display:flex; flex-direction:column; align-items:flex-start;
+      justify-content:center;
+    }
+    .placeholder-mark {
+      width:48px; height:48px; margin:0 0 17px;
+      display:grid; place-items:center; border-radius:13px;
+      background:var(--accent-soft); border:1px solid #344a76;
+      font-size:1.5rem; color:#c8d5ff;
+    }
+    .placeholder h2 { font-size:clamp(1.27rem,4vw,1.55rem); margin:0 0 9px; }
+    .placeholder p { color:var(--muted); max-width:42ch; }
+    footer { margin-top:24px; font-size:.78rem; color:var(--muted); }
+    @media(max-width:420px) {
+      .page { padding-top:22px; padding-bottom:26px; }
+      .question { border-radius:14px; }
+      .math { padding:10px 8px; }
+    }
+    @media(orientation:landscape) and (max-height:420px) {
+      .page { padding-top:12px; }
+      .subtitle { margin-bottom:14px; }
+      .placeholder { min-height:160px; }
+    }
   </style>
   <script>
     window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
-      svg: { fontCache: 'local' },
-      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
-</head>
-<body>
-  <header class="masthead">
-    <div class="masthead-inner">
-      <p class="strap">Quick reference · Worked solutions</p>
-      <h1>Math Notes</h1>
-      <p class="intro">New sheet first · Scroll the tabs for earlier questions · Rendered LaTeX</p>
-    </div>
-  </header>
-
-  <main class="shell">
-    <nav class="tabs" role="tablist" aria-label="Select a math question">
-      <button class="tab" id="tab-s2q1" data-question="s2q1" role="tab" aria-controls="panel-s2q1" aria-selected="true">New 1 · Average</button>
-      <button class="tab" id="tab-s2q2" data-question="s2q2" role="tab" aria-controls="panel-s2q2" aria-selected="false" tabindex="-1">New 2 · Vector</button>
-      <button class="tab" id="tab-s2q3" data-question="s2q3" role="tab" aria-controls="panel-s2q3" aria-selected="false" tabindex="-1">New 3 · 1-form</button>
-      <button class="tab" id="tab-q1" data-question="q1" role="tab" aria-controls="panel-q1" aria-selected="false" tabindex="-1">Old 1 · Hessian</button>
-      <button class="tab" id="tab-q2" data-question="q2" role="tab" aria-controls="panel-q2" aria-selected="false" tabindex="-1">Old 2 · Integral</button>
-      <button class="tab" id="tab-q3" data-question="q3" role="tab" aria-controls="panel-q3" aria-selected="false" tabindex="-1">Old 3 · Closest</button>
-      <button class="tab" id="tab-eigen" data-question="eigen" role="tab" aria-controls="panel-eigen" aria-selected="false" tabindex="-1">Eigenvectors</button>
-    </nav>
-
-
-    <section class="sheet" role="tabpanel" id="panel-s2q1" aria-labelledby="tab-s2q1">
-      <p class="eyebrow">New sheet · Question 1 · Average value</p>
-      <h2>Average of \(y+z\) over a solid</h2>
-      <p>Let \(D\) lie inside the cylinder \(y^2+z^2=9\), between \(y=-2\) and \(y=2\), between \(x=-1\) and \(x=1\), and above the \(xy\)-plane. Find the average value of \(y+z\).</p>
-      <div class="mathbox mutedbox">\[
-        -1\le x\le1,\quad -2\le y\le2,\quad
-        0\le z\le\sqrt{9-y^2}.
-      \]</div>
-      <div class="verdict">
-        <p class="label">Exact answer</p>
-        <strong>\(\displaystyle\boxed{\frac{46}{3\left(2\sqrt5+9\arcsin(2/3)\right)}}\)</strong>
-        <p class="fineprint" style="margin:6px 0 0">Approximately \(1.389\).</p>
-      </div>
-      <h3>Step 1 · Use the average-value formula</h3>
-      <div class="mathbox">\[
-        f_{\mathrm{avg}}=\frac{1}{\operatorname{Vol}(D)}
-          \iiint_D(y+z)\,dV.
-      \]</div>
-      <p>Because \(D\) is symmetric under \(y\mapsto-y\), the integral of \(y\) over \(D\) is zero. The \(x\)-interval has length \(2\), which cancels between the numerator and volume.</p>
-      <h3>Step 2 · Integrate \(z\)</h3>
-      <div class="mathbox mutedbox">\[
-        \begin{aligned}
-        \int_{-2}^2\int_0^{\sqrt{9-y^2}}z\,dz\,dy
-        &=\frac12\int_{-2}^2(9-y^2)\,dy\\
-        &=\frac{46}{3}.
-        \end{aligned}
-      \]</div>
-      <h3>Step 3 · Compute the cross-sectional area</h3>
-      <div class="mathbox mutedbox">\[
-        \begin{aligned}
-        A&=\int_{-2}^2\sqrt{9-y^2}\,dy\\
-         &=2\sqrt5+9\arcsin\!\left(\frac23\right).
-        \end{aligned}
-      \]</div>
-      <p class="result">Divide the numerator \(\frac{46}{3}\) by \(A\). The cancelled \(x\)-width needs no extra factor.</p>
-    </section>
-
-    <section class="sheet" role="tabpanel" id="panel-s2q2" aria-labelledby="tab-s2q2" hidden>
-      <p class="eyebrow">New sheet · Question 2 · Vector fields</p>
-      <h2>Circulation and flux signs</h2>
-      <p>Given the pictured vector field \(\mathbf F\) and the rectangular path \(\gamma\), determine the signs of the circulation around \(\gamma\) and the outward flux across it.</p>
-      <div class="answer-grid">
-        <div class="answer-chip"><span class="key">Circulation</span><strong>Negative</strong></div>
-        <div class="answer-chip"><span class="key">Flux</span><strong>Positive</strong></div>
-      </div>
-      <figure class="field-figure">
-  <svg viewBox="0 0 336 246" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic clockwise swirling vector field with net outward flux. A blue rectangle has counterclockwise traversal arrows.">
-    <defs>
-      <marker id="head-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#8391aa"/></marker>
-      <marker id="head-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2355d6"/></marker>
-    </defs>
-    <line x1="12" y1="123" x2="323" y2="123" stroke="#c9d4e3" stroke-width="1"/>
-    <line x1="168" y1="10" x2="168" y2="236" stroke="#c9d4e3" stroke-width="1"/>
-    <g stroke="#8391aa" stroke-width="1.5" stroke-linecap="round" marker-end="url(#head-gray)"><line x1="49.8" y1="213.3" x2="30.2" y2="206.7" /><line x1="82.2" y1="210" x2="61.8" y2="210" /><line x1="113.8" y1="206.7" x2="94.2" y2="213.3" /><line x1="144.9" y1="204" x2="127.1" y2="216" /><line x1="176" y1="202" x2="160" y2="218" /><line x1="207.2" y1="200.4" x2="192.8" y2="219.6" /><line x1="238.6" y1="199.1" x2="225.4" y2="220.9" /><line x1="269.8" y1="198.5" x2="258.2" y2="221.5" /><line x1="301.1" y1="198.1" x2="290.9" y2="221.9" /><line x1="47.1" y1="188.1" x2="32.9" y2="173.9" /><line x1="80.5" y1="185.3" x2="63.5" y2="176.7" /><line x1="113.3" y1="181" x2="94.7" y2="181" /><line x1="144.5" y1="176.7" x2="127.5" y2="185.3" /><line x1="175.1" y1="173.9" x2="160.9" y2="188.1" /><line x1="206" y1="172.1" x2="194" y2="189.9" /><line x1="237.2" y1="170.7" x2="226.8" y2="191.3" /><line x1="268.6" y1="169.5" x2="259.4" y2="192.5" /><line x1="300.1" y1="168.8" x2="291.9" y2="193.2" /><line x1="43.3" y1="161.8" x2="36.7" y2="142.2" /><line x1="76.3" y1="160.5" x2="67.7" y2="143.5" /><line x1="110.2" y1="158.2" x2="97.8" y2="145.8" /><line x1="144.4" y1="152" x2="127.6" y2="152" /><line x1="174.2" y1="145.8" x2="161.8" y2="158.2" /><line x1="204.3" y1="143.5" x2="195.7" y2="160.5" /><line x1="235.3" y1="142.2" x2="228.7" y2="161.8" /><line x1="266.7" y1="141.1" x2="261.3" y2="162.9" /><line x1="298.4" y1="140.1" x2="293.6" y2="163.9" /><line x1="40" y1="134.1" x2="40" y2="111.9" /><line x1="72" y1="133.2" x2="72" y2="112.8" /><line x1="104" y1="132.3" x2="104" y2="113.7" /><line x1="136" y1="131.4" x2="136" y2="114.6" /><line x1="200" y1="114.6" x2="200" y2="131.4" /><line x1="232" y1="113.7" x2="232" y2="132.3" /><line x1="264" y1="112.8" x2="264" y2="133.2" /><line x1="296" y1="111.9" x2="296" y2="134.1" /><line x1="37.6" y1="105.9" x2="42.4" y2="82.1" /><line x1="69.3" y1="104.9" x2="74.7" y2="83.1" /><line x1="100.7" y1="103.8" x2="107.3" y2="84.2" /><line x1="131.7" y1="102.5" x2="140.3" y2="85.5" /><line x1="161.8" y1="100.2" x2="174.2" y2="87.8" /><line x1="191.6" y1="94" x2="208.4" y2="94" /><line x1="225.8" y1="87.8" x2="238.2" y2="100.2" /><line x1="259.7" y1="85.5" x2="268.3" y2="102.5" /><line x1="292.7" y1="84.2" x2="299.3" y2="103.8" /><line x1="35.9" y1="77.2" x2="44.1" y2="52.8" /><line x1="67.4" y1="76.5" x2="76.6" y2="53.5" /><line x1="98.8" y1="75.3" x2="109.2" y2="54.7" /><line x1="130" y1="73.9" x2="142" y2="56.1" /><line x1="160.9" y1="72.1" x2="175.1" y2="57.9" /><line x1="191.5" y1="69.3" x2="208.5" y2="60.7" /><line x1="222.7" y1="65" x2="241.3" y2="65" /><line x1="255.5" y1="60.7" x2="272.5" y2="69.3" /><line x1="288.9" y1="57.9" x2="303.1" y2="72.1" /><line x1="34.9" y1="47.9" x2="45.1" y2="24.1" /><line x1="66.2" y1="47.5" x2="77.8" y2="24.5" /><line x1="97.4" y1="46.9" x2="110.6" y2="25.1" /><line x1="128.8" y1="45.6" x2="143.2" y2="26.4" /><line x1="160" y1="44" x2="176" y2="28" /><line x1="191.1" y1="42" x2="208.9" y2="30" /><line x1="222.2" y1="39.3" x2="241.8" y2="32.7" /><line x1="253.8" y1="36" x2="274.2" y2="36" /><line x1="286.2" y1="32.7" x2="305.8" y2="39.3" /></g>
-    <rect x="102" y="68" width="139" height="111" fill="rgba(48,90,216,.025)" stroke="#2355d6" stroke-width="3"/>
-    <g stroke="#2355d6" stroke-width="3.2" stroke-linecap="round" marker-end="url(#head-blue)">
-      <line x1="205" y1="68" x2="145" y2="68"/>
-      <line x1="102" y1="92" x2="102" y2="151"/>
-      <line x1="128" y1="179" x2="204" y2="179"/>
-      <line x1="241" y1="155" x2="241" y2="96"/>
-    </g>
-  </svg>
-</figure>
-      <p class="field-caption">Schematic of the directional pattern; blue arrows show counterclockwise path orientation.</p>
-      <h3>Why is circulation negative?</h3>
-      <p>The arrows of the field curl <strong>clockwise</strong>, while the path's arrows go <strong>counterclockwise</strong> (top left, left down, bottom right, right up). This gives negative circulation.</p>
-      <h3>Why is flux positive?</h3>
-      <p>The field is not purely rotational: it also has a net <strong>outward</strong> component. The outward flow exceeds the inward flow across the rectangle, so the flux is positive.</p>
-      <h3>Green's theorem check</h3>
-      <p>A simple model consistent with the picture's pattern is \(\mathbf F(x,y)=(y,\,y-x)\). For that illustrative model:</p>
-      <div class="mathbox mutedbox">\[
-        \begin{aligned}
-        \operatorname{curl}_z\mathbf F
-        &=\frac{\partial(y-x)}{\partial x}
-           -\frac{\partial y}{\partial y}=-2<0,\\[4pt]
-        \nabla\cdot\mathbf F
-        &=\frac{\partial y}{\partial x}
-          +\frac{\partial(y-x)}{\partial y}=1>0.
-        \end{aligned}
-      \]</div>
-      <p class="fineprint">The question supplies a plot, not a formula. This model explains the observed signs; it is not claimed to be the exact original field.</p>
-    </section>
-
-    <section class="sheet" role="tabpanel" id="panel-s2q3" aria-labelledby="tab-s2q3" hidden>
-      <p class="eyebrow">New sheet · Question 3 · Differential 1-forms</p>
-      <h2>Exactness and a potential function</h2>
-      <p>Consider the 1-form</p>
-      <div class="mathbox">\[
-        \alpha=(x+By^2)\,dx+(Cx+y^2)\,dy.
-      \]</div>
-      <h3>Part (a) · What are \(B\) and \(C\)?</h3>
-      <div class="verdict">
-        <p class="label">Answer</p>
-        <strong>\(\boxed{B=0,\qquad C=0}\)</strong>
-      </div>
-      <p>If \(\alpha=df\), then equality of the mixed partial derivatives requires</p>
-      <div class="mathbox mutedbox">\[
-        \begin{aligned}
-        \frac{\partial}{\partial y}(x+By^2)
-        &=\frac{\partial}{\partial x}(Cx+y^2),\\
-        2By&=C.
-        \end{aligned}
-      \]</div>
-      <p>Because this equation must hold for <em>every</em> \(y\), both constants must be zero.</p>
-      <h3>Part (b) · Find a potential \(f\)</h3>
-      <div class="verdict">
-        <p class="label">Answer</p>
-        <strong>\(\displaystyle\boxed{f(x,y)=\frac{x^2}{2}+\frac{y^3}{3}+K}\)</strong>
-      </div>
-      <p>With \(B=C=0\), the 1-form becomes \(\alpha=x\,dx+y^2\,dy\). Integrate the components:</p>
-      <div class="mathbox mutedbox">\[
-        f_x=x,\quad f_y=y^2
-        \quad\Longrightarrow\quad
-        f=\frac{x^2}{2}+\frac{y^3}{3}+K.
-      \]</div>
-      <p class="fineprint">Check: \(df=f_x\,dx+f_y\,dy=x\,dx+y^2\,dy=\alpha\).</p>
-    </section>
-
-    <section class="sheet" role="tabpanel" id="panel-q1" aria-labelledby="tab-q1" hidden>
-      <p class="eyebrow">Question 1 · Second derivative test</p>
-      <h2>Where can the absolute minimum occur?</h2>
-      <p>Consider \(f(x,y,z)\) on the closed ellipsoid</p>
-      <div class="mathbox mutedbox">\[\displaystyle x^2+\frac{y^2}{4}+\frac{z^2}{9}\le 1.\]</div>
-      <p>The only interior critical points are \(a\), \(b\), and \(c\), with Hessians:</p>
-      <div class="mathbox mutedbox">\[
-       D^2f(a)=\begin{bmatrix}3&0&0\\0&-2&1\\0&1&-1\end{bmatrix},
-       \quad D^2f(b)=\begin{bmatrix}2&0&0\\0&2&0\\0&0&2\end{bmatrix}
-      \]</div>
-      <div class="mathbox mutedbox">\[
-       D^2f(c)=\begin{bmatrix}-2&1&0\\1&1&0\\0&0&1\end{bmatrix}
-      \]</div>
-      <div class="verdict">
-        <p class="label">Correct choice · 5</p>
-        <strong>The minimum value of \(f\) could occur at \(b\).</strong>
-      </div>
-      <h3>Reasoning</h3>
-      <ol class="steps">
-        <li>\(D^2 f(b)=2I\) is <strong>positive definite</strong>, so \(b\) is a strict local minimum.</li>
-        <li>\(D^2 f(a)\) has both positive and negative curvature (e.g. diagonal entries \(3\) and \(-2\)); \(a\) is a saddle, not a minimum or maximum.</li>
-        <li>\(D^2 f(c)\) also has both signs (\(-2\) and \(1\)); \(c\) is a saddle.</li>
-        <li>The ellipsoid is closed and bounded. Since \(f\) is differentiable, it is continuous and attains both an absolute maximum and an absolute minimum somewhere in the region.</li>
-      </ol>
-      <p class="fineprint">The Hessian test tells us what happens locally. It does not guarantee that \(b\) is the absolute minimum; the boundary may contain a smaller value. Hence <em>could</em>, not <em>must</em>.</p>
-    </section>
-
-    <section class="sheet" role="tabpanel" id="panel-q2" aria-labelledby="tab-q2" hidden>
-      <p class="eyebrow">Question 2 · Reversing integration order</p>
-      <h2>Evaluate the double integral</h2>
-      <div class="mathbox">\[
-        I=\int_{0}^{1}\int_{x^2}^{1}\frac{\sqrt y}{1+y^2}\,dy\,dx
-      \]</div>
-      <div class="verdict">
-        <p class="label">Exact answer</p>
-        <strong>\(\displaystyle \boxed{\frac{\ln 2}{2}}\)</strong>
-      </div>
-      <h3>Step 1 · Describe the region</h3>
-      <p>The original bounds say \(0\le x\le1\) and \(x^2\le y\le1\). Switching the order gives:</p>
-      <div class="mathbox mutedbox">\[
-        0\le y\le1,\qquad 0\le x\le\sqrt y.
-      \]</div>
-      <h3>Step 2 · Integrate with respect to \(x\)</h3>
-      <div class="mathbox">\[
-        \begin{aligned}
-        I&=\int_0^1\int_0^{\sqrt y}\frac{\sqrt y}{1+y^2}\,dx\,dy\\[3pt]
-         &=\int_0^1\frac{\sqrt y}{1+y^2}(\sqrt y)\,dy\\[3pt]
-         &=\int_0^1\frac{y}{1+y^2}\,dy.
-        \end{aligned}
-      \]</div>
-      <h3>Step 3 · Integrate using substitution</h3>
-      <div class="mathbox">\[
-        \begin{aligned}
-        I&=\left[\tfrac12\ln(1+y^2)\right]_0^1\\
-        &=\boxed{\tfrac12\ln 2}.
-        \end{aligned}
-      \]</div>
-      <p class="fineprint"><strong>Fast recognition:</strong> The integrand contains \(\sqrt y\) and the reversed \(x\)-width is \(\sqrt y\), so their product simplifies to \(y\).</p>
-    </section>
-
-    <section class="sheet" role="tabpanel" id="panel-q3" aria-labelledby="tab-q3" hidden>
-      <p class="eyebrow">Question 3 · Constrained optimization</p>
-      <h2>Find the closest point to the origin</h2>
-      <p>Find the point or points on this surface closest to \((0,0,0)\):</p>
-      <div class="mathbox">\[
-        2x^2+y^2-(z-1)^2=1
-      \]</div>
-      <div class="verdict">
-        <p class="label">Two equally close points</p>
-        <strong>\(\displaystyle \boxed{\left(\pm\frac{\sqrt{26}}{6},\,0,\,\frac13\right)}\)</strong>
-        <p style="margin:7px 0 0;font-size:.87rem">Minimum distance: \(\displaystyle\sqrt{\frac56}\)</p>
-      </div>
-      <h3>Step 1 · Minimize squared distance</h3>
-      <p>It is easier to minimize \(D^2=x^2+y^2+z^2\) than its square root. Rearrange the constraint:</p>
-      <div class="mathbox mutedbox">\[
-        2x^2+y^2=1+(z-1)^2.
-      \]</div>
-      <h3>Step 2 · Use the constraint</h3>
-      <p>For fixed \(z\), we have</p>
-      <div class="mathbox">\[
-        x^2+y^2=\frac{1+(z-1)^2}{2}+\frac{y^2}{2}.
-      \]</div>
-      <p>The right side is smallest when <strong>\(y=0\)</strong>. Thus</p>
-      <div class="mathbox mutedbox">\[
-        D^2=\tfrac12\big(1+(z-1)^2\big)+z^2
-        =\tfrac32z^2-z+1.
-      \]</div>
-      <h3>Step 3 · Minimize over \(z\)</h3>
-      <div class="mathbox">\[
-        \frac{dD^2}{dz}=3z-1=0
-        \quad\Longrightarrow\quad z=\frac13.
-      \]</div>
-      <p>Now substitute \(y=0\) and \(z=\frac13\) into the constraint:</p>
-      <div class="mathbox">\[
-        2x^2=1+\left(-\frac23\right)^2=\frac{13}{9}
-        \quad\Longrightarrow\quad x=\pm\frac{\sqrt{26}}6.
-      \]</div>
-      <p class="result">Finally, \(\displaystyle D^2=\frac56\), so \(\displaystyle D=\sqrt{\frac56}\).</p>
-      <p class="fineprint">This method establishes the global minimum directly, without needing to compare multiple Lagrange-multiplier candidates.</p>
-    </section>
-
-    <section class="sheet" role="tabpanel" id="panel-eigen" aria-labelledby="tab-eigen" hidden>
-      <p class="eyebrow">Previous question · AI / Linear algebra</p>
-      <h2>Eigenvector word embedding</h2>
-      <p>If \(V=[v_1,v_2,\ldots,v_c]\) is the eigenvector matrix of a word co-occurrence matrix \(C\), what is the eigenvector embedding of word \(e_i\)?</p>
-      <div class="verdict">
-        <p class="label">Answer</p>
-        <strong>Take the \(i\)-th row of \(V\).</strong>
-      </div>
-      <div class="mathbox">\[
-        \operatorname{embed}(e_i)
-        =e_i^\top V
-        =\begin{bmatrix}(v_1)_i&(v_2)_i&\cdots&(v_c)_i\end{bmatrix}.
-      \]</div>
-      <p>As a column vector, the same embedding is</p>
-      <div class="mathbox mutedbox">\[
-        V^\top e_i=
-        \begin{bmatrix}(v_1)_i\\(v_2)_i\\\vdots\\(v_c)_i\end{bmatrix}.
-      \]</div>
-      <h3>Why?</h3>
-      <p>\(e_i\) is the one-hot basis vector for word \(i\). Multiplying \(e_i^\top V\) selects the \(i\)-th row, which contains that word's coordinates in each eigenvector direction.</p>
-      <p class="fineprint">Columns of \(V\) are eigenvectors; rows of \(V\) are word embeddings under the eigenvector-only convention.</p>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>Responsive mathematical notes · LaTeX rendered by <a href="https://www.mathjax.org/">MathJax</a> · <a href="https://github.com/prototyp037/24IsTheAnswerToLife">GitHub source</a></p>
-  </footer>
-
-  <script>
-    (function () {
-      const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
-      const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
-      const ids = tabs.map(t => t.dataset.question);
-      function show(id, focus) {
-        if (!ids.includes(id)) return;
-        for (const tab of tabs) {
-          const active = tab.dataset.question === id;
-          tab.setAttribute('aria-selected', String(active));
-          tab.tabIndex = active ? 0 : -1;
-          if (active && focus) tab.focus();
-        }
-        for (const panel of panels) {
-          panel.hidden = panel.id !== 'panel-' + id;
-        }
-        const activePanel = document.getElementById('panel-' + id);
-        if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise([activePanel]).catch(function (err) { console.warn('Math typesetting failed:', err); });
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      },
+      output: {
+        displayOverflow: 'linebreak',
+        linebreaks: {
+          inline: true,
+          width: '100%',
+          lineleading: 0.2
         }
       }
-      tabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => {
-          show(tab.dataset.question, false);
-          history.replaceState(null, '', '#' + tab.dataset.question);
-        });
-        tab.addEventListener('keydown', (event) => {
-          let next = index;
-          if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-          else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-          else if (event.key === 'Home') next = 0;
-          else if (event.key === 'End') next = tabs.length - 1;
-          else return;
-          event.preventDefault();
-          show(tabs[next].dataset.question, true);
-          history.replaceState(null, '', '#' + tabs[next].dataset.question);
-        });
-      });
-      window.addEventListener('hashchange', () => show(location.hash.slice(1), false));
-      show(ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 's2q1', false);
-    })();
+    };
   </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <p class="eyebrow">Worksheet solutions</p>
+      <h1>Math Notes</h1>
+      <p class="subtitle">The latest sheet, fully worked out. One page. Vertical scrolling only.</p>
+    </header>
+
+    <main id="worksheet" class="worksheet" aria-label="Current worksheet">
+      <!--
+        Replace the placeholder below with the NEXT worksheet's complete questions.
+        All solutions belong in this <main>, as successive <section class="question"> elements.
+        Never append prior worksheets. Keep all content in one vertical reading column.
+        Use <div class="math"> \[ ... \] </div> for displayed equations;
+        MathJax v4 is configured to wrap long expressions automatically.
+        For very wide constructs (especially matrices and aligned systems), explicitly
+        break calculations into multiple short displayed equations and avoid wide tables.
+      -->
+      <section class="question placeholder" aria-label="Waiting for the next worksheet">
+        <div class="placeholder-mark" aria-hidden="true">∑</div>
+        <h2>Ready for the next worksheet</h2>
+        <p>The previous solutions have been cleared. The next uploaded sheet will replace this page with its questions, answers, and full step-by-step workings.</p>
+      </section>
+    </main>
+
+    <footer>Dark mode · Designed for small screens · LaTeX-ready · <a href="https://github.com/prototyp037/24IsTheAnswerToLife">GitHub</a></footer>
+  </div>
 </body>
 </html>
