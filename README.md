@@ -1,37 +1,33 @@
-# Math Quick Notes
-
-A mobile-first [GitHub Pages](https://pages.github.com/) website of worked calculus and AI questions, with LaTeX rendered by [MathJax](https://www.mathjax.org/). Designed for narrow rectangular screens.
+# Math Notes — Single-Worksheet Website
 
 **Website:** https://prototyp037.github.io/24IsTheAnswerToLife/
 
-## Latest sheet — three new questions
+This is a single-page, dark-themed GitHub Pages site. It always displays solutions to **only the most recently uploaded worksheet**.
 
-Select the **New 1**, **New 2**, or **New 3** tabs to see full derivations:
+## Current state
 
-| Question | Answer |
-|---|---|
-| **New 1 — Average value** | $\displaystyle \frac{46}{3\left(2\sqrt5+9\arcsin(2/3)\right)}\approx1.389$ |
-| **New 2 — Vector field** | **Circulation negative; flux positive** for the counterclockwise rectangular path and field shown |
-| **New 3(a) — Exact 1-form** | $B=C=0$ |
-| **New 3(b) — Potential** | $\displaystyle f(x,y)=\frac{x^2}{2}+\frac{y^3}{3}+K$ |
+The website is intentionally **empty** and displays "Ready for the next worksheet". Previous questions and solutions have been removed from the current site (though older versions may still exist in public Git history).
 
-The question text is transcribed from the supplied sheet, and a compact, schematic vector-field illustration helps explain the circulation and flux. No personal identifiers from the sheet are published.
+## Rules for the next update
 
-## Earlier questions (still available)
+1. Completely **replace** the current page contents for each new photo. Do **not** retain or append earlier worksheets.
+2. Write the full questions, answers, and step-by-step solutions from the new sheet only.
+3. Place **every problem in a single vertical flow**, with successive HTML section elements using the class "question" in [index.html](index.html). Do not use tabs or carousels.
+4. Keep the current **dark theme** and mobile-friendly layout for narrow rectangular screens.
+5. Avoid horizontal scrolling. Use MathJax v4's **automatic equation line breaking** (with output.displayOverflow set to linebreak), and manually split exceptionally wide matrices, tables, or aligned expressions into smaller steps if necessary. The goal is vertical scrolling only.
+6. Push changes to the existing main branch so the **same link** always displays the newest worksheet.
+7. Do not publish names, student IDs, or other personal data visible in uploaded photos.
 
-- **Old 1 — Hessian test:** The minimum could occur at $b$, since $D^2 f(b)=2I$ is positive definite, while $a$ and $c$ are saddles.
-- **Old 2 — Changing integration order:** $\displaystyle \int_0^1\int_{x^2}^1\frac{\sqrt y}{1+y^2}\,dy\,dx=\frac{\ln2}{2}$.
-- **Old 3 — Closest point:** $\displaystyle \left(\pm\frac{\sqrt{26}}6,0,\frac13\right)$, each at distance $\sqrt{5/6}$.
-- **Eigenvectors:** $\operatorname{embed}(e_i)=e_i^\top V$, the $i$-th row of $V$.
+## Technology
 
-## Using the site
+- Static HTML + CSS with no build process, in [index.html](index.html)
+- Dark, responsive stylesheet
+- MathJax 4 (tex-chtml.js) for LaTeX, with automatic line breaking configured
+- GitHub Pages via main / (root), using [.nojekyll](.nojekyll)
+- HTTPS website: https://prototyp037.github.io/24IsTheAnswerToLife/
 
-- Tap a tab to show one problem; **swipe the horizontal tab row** to access other problems.
-- The new sheet opens by default. Direct links: [New 1](https://prototyp037.github.io/24IsTheAnswerToLife/#s2q1), [New 2](https://prototyp037.github.io/24IsTheAnswerToLife/#s2q2), [New 3](https://prototyp037.github.io/24IsTheAnswerToLife/#s2q3).
-- Equations are scrollable within their own boxes, so large formulas won't widen the entire page.
-- The website is static HTML, CSS, and JavaScript in [index.html](index.html). No build system required.
-- MathJax is loaded from jsDelivr and requires an internet connection.
+### Hosting
 
-## GitHub Pages (HTTPS)
+If the site is not yet published, enable GitHub Pages in [Settings → Pages](https://github.com/prototyp037/24IsTheAnswerToLife/settings/pages), select **Deploy from a branch**, main, and /(root).
 
-If Pages isn't enabled: open [Settings → Pages](https://github.com/prototyp037/24IsTheAnswerToLife/settings/pages), select **Deploy from a branch**, choose **main** and **/(root)**, then save. The [.nojekyll](.nojekyll) file disables Jekyll preprocessing.
+Because the repository is public, previous versions can remain visible in commit history even after the current page has been overwritten.
